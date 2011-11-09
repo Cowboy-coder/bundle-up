@@ -5,12 +5,13 @@ Bundle up is a middleware for connect to manage all client-side assets in an org
 
     // assets.js
     module.exports = function(assets) {
-    	assets.js.addFile(__dirname + "/public/js/jquery-1.6.4.min.js");
-    	assets.js.addFile(__dirname + "/public/js/jquery.placeholder.min.js");
-    	assets.js.addFile(__dirname + "/app/client/main.coffee");
+        assets.root = __dirname
+    	assets.addJs("/public/js/jquery-1.6.4.min.js");
+    	assets.addJs("/public/js/jquery.placeholder.min.js");
+    	assets.addJs("/app/client/main.coffee");
     
-    	assets.css.addFile(__dirname + "/public/bootstrap/bootstrap.min.css");
-    	assets.css.addFile(__dirname + "/app/styles/screen.styl");
+    	assets.addCss("/public/bootstrap/bootstrap.min.css");
+    	assets.addCss("/app/styles/screen.styl");
     }
 
 Just point to a file (.js, .css, .coffee or .styl are currently supported) anywhere in your app directory. In your view you can then just render all the css or javascript files by calling `renderStyles` and `renderJs` like this:
