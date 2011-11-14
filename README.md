@@ -54,3 +54,10 @@ Usage
     }));
 
 The first parameter is the path to the assets file
+
+
+TODO
+----
+
+ * Add support for addCss("folder/*.css") and addJs("**.coffee") etc.
+ * Add support for auto compiling using middleware in dev mode
