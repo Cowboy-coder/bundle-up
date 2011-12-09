@@ -11,7 +11,7 @@
     "node": ">= 0.4.x < 0.7.0"
   },
   "scripts": {
-    "test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js --coffee specs/"
+    "test": "node_modules/.bin/jasmine-node --coffee specs/"
   },
   "dependencies": {
     "coffee-script": ">= 1.1.3"
