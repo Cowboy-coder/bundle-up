@@ -1,6 +1,6 @@
 suite = require("jasmine-node")
-Js = require "./../lib/Js"
-Css = require "./../lib/Css"
+Js = require "./../lib/js"
+Css = require "./../lib/css"
 helper = require "./helper"
 fs = require "fs"
 
