@@ -62,3 +62,8 @@ TODO
 
  * Add support for addCss("folder/\*.css") and addJs("**.coffee") etc.
  * Add support for namespaced assets
+
+LICENSE
+-------
+
+MIT licensed
