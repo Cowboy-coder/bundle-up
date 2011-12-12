@@ -59,7 +59,7 @@ class Bundle
       origFile: origFile
       needsCompiling: needsCompiling
 
-  toFile: (filename) =>
+  toBundle: (filename) =>
     str = ''
     for file in @files
       str += fs.readFileSync(file.file, 'utf-8').trim('\n') + '\n'

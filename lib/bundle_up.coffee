@@ -12,11 +12,11 @@ class BundleUp
     require(assetPath)(new AssetsManager(@css, @js))
 
     if options.bundle
-      filename = @js.toFile('global.js')
+      filename = @js.toBundle('global.js')
       @js.files = []
       @js.addFile(filename, true)
 
-      filename = @css.toFile('global.css')
+      filename = @css.toBundle('global.css')
       @css.files = []
       @css.addFile(filename, true)
     else
