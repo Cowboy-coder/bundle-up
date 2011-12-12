@@ -1,7 +1,7 @@
 {
   "name": "bundle-up",
   "author": "Fredrik Lindin <fredriklindin@gmail.com>",
-  "description": "A simple asset manager as middleware",
+  "description": "A simple asset manager middleware for connect",
   "version": "0.1.3",
   "repository": {
     "url": ""
