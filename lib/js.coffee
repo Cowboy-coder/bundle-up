@@ -1,4 +1,4 @@
-Bundle = require "./bundle"
+Bundle = require './bundle'
 class Js extends Bundle
   constructor: (@options) ->
     super
@@ -9,13 +9,13 @@ class Js extends Bundle
     return code
 
   render: () ->
-    js = ""
+    js = ''
     for file in @files
         js += "<script src='#{file.url}' type='text/javascript'></script>"
     js
 
   _convertFilename: (filename) ->
-    splitted = filename.split(".")
-    splitted.splice(0, splitted.length - 1).join(".") + ".js"
+    splitted = filename.split('.')
+    splitted.splice(0, splitted.length - 1).join('.') + '.js'
 
 module.exports = Js

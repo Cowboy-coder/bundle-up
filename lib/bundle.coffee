@@ -1,8 +1,8 @@
-crypto = require "crypto"
-path = require "path"
-compiler = require "./compiler"
-fs = require "fs"
-{writeToFile, normalizeUrl} = require "./helpers"
+crypto = require 'crypto'
+path = require 'path'
+compiler = require './compiler'
+fs = require 'fs'
+{writeToFile, normalizeUrl} = require './helpers'
 
 class Bundle
   constructor: (@options) ->
@@ -13,7 +13,7 @@ class Bundle
   # the path returned is relative to the
   # root of the application
   _getRelativePath: (file) =>
-    relativePath = ""
+    relativePath = ''
     for char, i in file
       if @options.staticRoot[i] == file[i]
         continue
@@ -27,9 +27,9 @@ class Bundle
   # if the file needs to get compiled
   #
   _needsCompiling: (file) ->
-    fileExt = file.split(".")
+    fileExt = file.split('.')
     fileExt = fileExt[fileExt.length - 1]
-    return  fileExt != "js" and fileExt != "css"
+    return  fileExt != 'js' and fileExt != 'css'
 
 
   addFile:(file, bundle=false) =>
@@ -41,14 +41,14 @@ class Bundle
     # Determine if we need to copy/compile
     # the file into the staticRoot folder
     if (file.indexOf(@options.staticRoot) == -1 or @_needsCompiling(file)) and not bundle
-      writeTo = path.normalize(@_convertFilename(@options.staticRoot + "/generated/" + relativeFile))
+      writeTo = path.normalize(@_convertFilename(@options.staticRoot + '/generated/' + relativeFile))
       needsCompiling = true
       @_compile(file, writeTo) if bundle
       file = writeTo
       relativeFile = @_getRelativePath(file)
 
     if bundle
-      url = @options.staticUrlRoot + "generated/bundle/" + relativeFile
+      url = @options.staticUrlRoot + 'generated/bundle/' + relativeFile
     else
       url = @options.staticUrlRoot + relativeFile
 
@@ -60,12 +60,12 @@ class Bundle
       needsCompiling: needsCompiling
 
   toFile: (filename) =>
-    str = ""
+    str = ''
     for file in @files
-      str += fs.readFileSync(file.file, "utf-8").trim("\n") + "\n"
+      str += fs.readFileSync(file.file, 'utf-8').trim('\n') + '\n'
 
     str = @minify(str)
-    hash = crypto.createHash('md5').update(str).digest("hex")
+    hash = crypto.createHash('md5').update(str).digest('hex')
     filename = "#{hash.substring(0, 7)}_#{filename}"
 
 

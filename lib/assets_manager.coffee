@@ -1,6 +1,6 @@
 class AssetsManager
   constructor: (@css, @js)->
-    @root = ""
+    @root = ''
 
   addCss: (file) =>
     @css.addFile("#{@root}/#{file}", false)

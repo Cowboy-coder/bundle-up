@@ -1,5 +1,5 @@
-mkdirp = require "mkdirp"
-fs = require "fs"
+mkdirp = require 'mkdirp'
+fs = require 'fs'
 
 #
 # Convenient method for writing a file on
@@ -8,7 +8,7 @@ fs = require "fs"
 # path to the file.
 #
 #
-#    writeToFile("/tmp/hi/folder/file.js", "console.log('hi')")
+#    writeToFile('/tmp/hi/folder/file.js', "console.log('hi')")
 #   
 # will create a file at /tmp/hi/folder/file.js with provided content
 #
@@ -16,9 +16,9 @@ writeToFile = (file, content) ->
   try
     fs.writeFileSync(file, content)
   catch e
-    if e.code == "ENOENT"
-      splitted = file.split("/")
-      mkdirp.sync(splitted.splice(0, splitted.length-1).join("/"), 0777)
+    if e.code == 'ENOENT'
+      splitted = file.split('/')
+      mkdirp.sync(splitted.splice(0, splitted.length-1).join('/'), 0777)
 
       # Retry!
       writeToFile(file, content)
@@ -29,7 +29,7 @@ writeToFile = (file, content) ->
 # This is fancy
 #
 normalizeUrl = (url) ->
-  return url.replace("//", "/")
+  return url.replace('//', '/')
 
 exports.writeToFile = writeToFile
 exports.normalizeUrl = normalizeUrl
