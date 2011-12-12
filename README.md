@@ -1,4 +1,4 @@
-Bundle up!
+Bundle up!  [![Build Status](https://secure.travis-ci.org/Cowboy-coder/bundle-up.png)](https://secure.travis-ci.org/Cowboy-coder/bundle-up)
 ==========
 
 Installation
