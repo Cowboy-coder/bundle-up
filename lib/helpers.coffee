@@ -16,7 +16,7 @@ writeToFile = (file, content) ->
   try
     fs.writeFileSync(file, content)
   catch e
-    if e.code == 'ENOENT'
+    if e.code == 'ENOENT' or e.code == 'EBADF'
       splitted = file.split('/')
       mkdirp.sync(splitted.splice(0, splitted.length-1).join('/'), 0777)
 
