@@ -59,4 +59,4 @@ TODO
 ----
 
  * Add support for addCss("folder/\*.css") and addJs("**.coffee") etc.
- * Add support for auto compiling using middleware in dev mode
+ * Add support for namespaced assets
