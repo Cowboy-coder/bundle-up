@@ -1,6 +1,11 @@
 Bundle up!
 ==========
 
+Installation
+------------
+
+$ npm install bundle-up
+
 Bundle up is a middleware for connect to manage all client-side assets in an organized way. Everything is manged using an assets file
 
     // assets.js
