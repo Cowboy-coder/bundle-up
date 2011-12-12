@@ -33,7 +33,7 @@ class Bundle
     return  fileExt != 'js' and fileExt != 'css'
 
 
-  addFile:(file, bundle=false) =>
+  addFile:(file) =>
     file = path.normalize(file)
     relativeFile = @_getRelativePath(file)
     origFile = file
@@ -41,17 +41,13 @@ class Bundle
 
     # Determine if we need to copy/compile
     # the file into the staticRoot folder
-    if (file.indexOf(@options.staticRoot) == -1 or @_needsCompiling(file)) and not bundle
+    if (file.indexOf(@options.staticRoot) == -1 or @_needsCompiling(file))
       writeTo = path.normalize(@_convertFilename(@options.staticRoot + '/generated/' + relativeFile))
       needsCompiling = true
-      @_compile(file, writeTo) if bundle
       file = writeTo
       relativeFile = @_getRelativePath(file)
 
-    if bundle
-      url = @options.staticUrlRoot + 'generated/bundle/' + relativeFile
-    else
-      url = @options.staticUrlRoot + relativeFile
+    url = @options.staticUrlRoot + relativeFile
 
     url = normalizeUrl(url)
     @files.push
@@ -63,6 +59,7 @@ class Bundle
   toBundle: (filename) =>
     str = ''
     for file in @files
+      @_compile(file.origFile, file.file)
       str += fs.readFileSync(file.file, 'utf-8').trim('\n') + '\n'
 
     str = @minify(str)

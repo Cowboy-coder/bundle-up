@@ -1,12 +1,8 @@
-module.exports (assets) ->
-	assets.root = __dirname + '/file'
-	assets.addJs('/app/client/main.coffee')
-	assets.addJs('/public/js/jquery-1.6.4.min.js')
-	assets.addJs('/public/js/jquery.placeholder.min.js')
-	assets.addJs('/public/js/templates.js')
-	assets.addJs('/public/javascripts/soft.js')
-	assets.addJs('/public/javascripts/soft2.js')
-
-	assets.addCss('/app/styles/screen.styl')
-}
-
+module.exports = (assets) ->
+  assets.root = __dirname
+  assets.addJs('/coffee/1.coffee')
+  assets.addJs('/public/jquery.js')
+  assets.addJs('/coffee/2.coffee')
+  assets.addJs('/js/1.js')
+  assets.addCss('/stylus/main.styl')
+  assets.addCss('/public/print.styl')

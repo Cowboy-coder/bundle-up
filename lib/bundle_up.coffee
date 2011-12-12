@@ -14,11 +14,11 @@ class BundleUp
     if options.bundle
       filename = @js.toBundle('global.js')
       @js.files = []
-      @js.addFile(filename, true)
+      @js.addFile("#{options.staticRoot}/generated/bundle/#{filename}")
 
       filename = @css.toBundle('global.css')
       @css.files = []
-      @css.addFile(filename, true)
+      @css.addFile("#{options.staticRoot}/generated/bundle/#{filename}")
     else
       # Compile files on-the-fly when not bundled
       @app.use (new OnTheFlyCompiler(@js, @css)).middleware
