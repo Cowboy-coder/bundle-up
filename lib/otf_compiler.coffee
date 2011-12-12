@@ -15,16 +15,20 @@ class OnTheFlyCompiler
 
   middleware: (req, res, next) =>
     if req.url.indexOf('.js') > -1
-      for file in @js.files
+      for file, i in @js.files
         if req.url == file.url
-          @handleFile(file, -> next())
+          return @handleFile(file, -> next())
+        else
+          return next() if i == (@js.files.length - 1)
 
     else if req.url.indexOf('.css') > -1
-      for file in @css.files
+      for file, i in @css.files
         if req.url == file.url
-          @handleFile(file, -> next()) if req.url == file.url
+          return @handleFile(file, -> next()) if req.url == file.url
+        else
+          return next() if i == (@css.files.length - 1)
     else
-      next()
+      return next()
 
   handleFile: (file, fn) =>
     # Check modified timestamp on file
