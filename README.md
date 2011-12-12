@@ -32,6 +32,8 @@ By default this will render
     <script src='/js/jquery.placeholder.min.js' type='text/javascript'></script>
     <script src='/generated/app/client/main.js' type='text/javascript'></script>
 
+All assets will be compiled on-the-fly when `bundle:false` is set. Therefore the server never
+needs to be restarted when editing the different assets.
 
 To render bundles `bundle:true` needs to be passed as a parameter to the middleware. This will concatenate all javascript and css files into bundles and render this:
 
