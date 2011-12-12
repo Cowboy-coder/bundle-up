@@ -47,14 +47,13 @@ All files that needs to be compiled, copied (if you are bundling up a file that 
 Usage
 -----
 
-    app.use(new BundleUp(__dirname + "/assets", {
+    BundleUp(app, __dirname + "/assets", {
       staticRoot: __dirname + "/public/",
       staticUrlRoot:"/",
       bundle:true
-    }));
+    });
 
-The first parameter is the path to the assets file
-
+The first parameter is the app object and the second is the path to the assets file
 
 TODO
 ----

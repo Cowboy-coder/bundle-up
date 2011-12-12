@@ -27,8 +27,8 @@ class OnTheFlyCompiler
       next()
 
   handleFile: (file, fn) =>
+    # Check modified timestamp on file
     fs.stat file.origFile, (err, destStats) =>
-      # Check modified timestamp on file
       if not file._mtime
         return @compileFile(file, fn)
       if file._mtime < destStats.mtime
