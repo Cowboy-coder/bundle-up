@@ -1,4 +1,5 @@
-fs = require "node-fs"
+mkdirp = require "mkdirp"
+fs = require "fs"
 
 #
 # Convenient method for writing a file on
@@ -17,7 +18,7 @@ writeToFile = (file, content) ->
   catch e
     if e.code == "ENOENT"
       splitted = file.split("/")
-      fs.mkdirSync(splitted.splice(0, splitted.length-1).join("/"), 0777, true)
+      mkdirp.sync(splitted.splice(0, splitted.length-1).join("/"), 0777)
 
       # Retry!
       writeToFile(file, content)

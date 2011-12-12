@@ -1,28 +1,34 @@
-AssetsManager = require "./assets_manager"
-Js = require "./js"
-Css = require "./css"
+AssetsManager = require './assets_manager'
+Js = require './js'
+Css = require './css'
+OnTheFlyCompiler = require './otf_compiler'
 
 class BundleUp
-  constructor: (path, options = {bundle:false}) ->
+  constructor: (app, assetPath, options = {bundle:false}) ->
+    @app = app
     @js = new Js(options)
     @css = new Css(options)
 
-    require(path)(new AssetsManager(@css, @js))
+    require(assetPath)(new AssetsManager(@css, @js))
 
     if options.bundle
-      filename = @js.toFile("global.js")
+      filename = @js.toFile('global.js')
       @js.files = []
       @js.addFile(filename, true)
 
-      filename = @css.toFile("global.css")
+      filename = @css.toFile('global.css')
       @css.files = []
       @css.addFile(filename, true)
+    else
+      # Compile files on-the-fly when not bundled
+      @app.use (new OnTheFlyCompiler(@js, @css)).middleware
 
-    return @middleware
+    @app.use @middleware
     
   middleware: (req, res, next) =>
-    res.local("renderStyles", @css.render())
-    res.local("renderJs", @js.render())
+    res.local('renderStyles', @css.render())
+    res.local('renderJs', @js.render())
     next()
 
-module.exports = BundleUp
+module.exports = (app, assetPath, options)->
+  new BundleUp(app, assetPath, options)

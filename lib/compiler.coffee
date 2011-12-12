@@ -2,13 +2,11 @@ fs = require("fs")
 coffee = require("coffee-script")
 stylus = require("stylus")
 
-stylusCompile = (content, file) ->
-  stylus(content)
+exports.stylusCompile = stylusCompile = (content, file) ->
+  return stylus(content)
   .set('filename', file)
 
-exports.compileFile =  (file, cb) ->
-  content = fs.readFileSync(file, "utf-8")
-
+exports.compile = compile = (content, file, cb) ->
   fileExt = file.split(".")
   fileExt = fileExt[fileExt.length - 1]
 
@@ -23,3 +21,7 @@ exports.compileFile =  (file, cb) ->
       return cb(null, content)
     when "js"
       return cb(null, content)
+
+exports.compileFile =  (file, cb) ->
+  content = fs.readFileSync(file, "utf-8")
+  return compile(content, file, cb)

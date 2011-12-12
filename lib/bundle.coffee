@@ -36,12 +36,15 @@ class Bundle
     file = path.normalize(file)
     relativeFile = @_getRelativePath(file)
     origFile = file
+    needsCompiling = false
 
     # Determine if we need to copy/compile
     # the file into the staticRoot folder
     if (file.indexOf(@options.staticRoot) == -1 or @_needsCompiling(file)) and not bundle
       writeTo = path.normalize(@_convertFilename(@options.staticRoot + "/generated/" + relativeFile))
-      file = path.normalize(@_compile(file, writeTo))
+      needsCompiling = true
+      @_compile(file, writeTo) if bundle
+      file = writeTo
       relativeFile = @_getRelativePath(file)
 
     if bundle
@@ -54,6 +57,7 @@ class Bundle
       url: url
       file: file
       origFile: origFile
+      needsCompiling: needsCompiling
 
   toFile: (filename) =>
     str = ""
