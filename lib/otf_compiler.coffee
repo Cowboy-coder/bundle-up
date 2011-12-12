@@ -27,8 +27,7 @@ class OnTheFlyCompiler
           return @handleFile(file, -> next()) if req.url == file.url
         else
           return next() if i == (@css.files.length - 1)
-    else
-      return next()
+    return next()
 
   handleFile: (file, fn) =>
     # Check modified timestamp on file
