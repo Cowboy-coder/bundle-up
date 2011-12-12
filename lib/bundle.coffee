@@ -6,6 +6,7 @@ fs = require 'fs'
 
 class Bundle
   constructor: (@options) ->
+    @options.staticRoot = path.normalize(@options.staticRoot)
     @files = []
 
   # Gets relative path from staticRoot. If the

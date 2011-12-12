@@ -28,3 +28,7 @@ describe 'Path normalizing', ->
     secondFile = @js.files[0]
     expect(firstFile.url).toEqual(secondFile.url)
     expect(firstFile.url).toEqual('/url/generated/js/1.js')
+
+  it "shouldn't matter if staticRoot path isn't 'normalized'" , ->
+    @js = new Js(staticRoot:"#{__dirname}/../specs/files/public", staticUrlRoot:'/')
+    expect(@js.options.staticRoot).toEqual("#{__dirname}/files/public")
