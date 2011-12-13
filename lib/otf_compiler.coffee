@@ -2,16 +2,20 @@ fs = require 'fs'
 mkdirp = require 'mkdirp'
 async = require 'async'
 stylus = require 'stylus'
-{compile, stylusCompile} = require './compiler'
+{compile} = require './compiler'
 
 class OnTheFlyCompiler
-  constructor: (js, css) ->
+  constructor: (js, css, compilers) ->
     @js = js
     @css = css
+    @compilers = compilers
 
-    @mapImports(@js.files)
-    @mapImports(@css.files)
+    setImportFlag = (files) ->
+      for file in files
+        file._importChecked = false
 
+    setImportFlag(@js.files)
+    setImportFlag(@css.files)
 
   middleware: (req, res, next) =>
     if req.url.indexOf('.js') > -1
@@ -30,6 +34,12 @@ class OnTheFlyCompiler
     return next()
 
   handleFile: (file, fn) =>
+    if not file._importChecked
+      @mapImports file, =>
+        file._importChecked = true
+        return @handleFile(file, fn)
+      return
+
     # Check modified timestamp on file
     fs.stat file.origFile, (err, destStats) =>
       if not file._mtime
@@ -62,7 +72,7 @@ class OnTheFlyCompiler
     return fn() unless file.needsCompiling
 
     fs.readFile file.origFile, 'utf8', (err, content) =>
-      compile content, file.origFile, (err, newContent) =>
+      compile @compilers, content, file.origFile, (err, newContent) =>
         @writeToFile file.file, newContent, ->
           fs.stat file.origFile, (err, stats) ->
             file._mtime = stats.mtime
@@ -83,29 +93,30 @@ class OnTheFlyCompiler
       else
         return fn()
 
-  mapImports: (files) ->
-    async.forEach(files, (file, cb) ->
-      # Need to map imports for stylus files
-      if file.origFile.indexOf('.styl') > -1
-        fs.readFile file.origFile, 'utf8', (err, content) ->
+  mapImports: (file, fn) ->
+    # Need to map imports for stylus files
+    if file.origFile.indexOf('.styl') > -1
+      fs.readFile file.origFile, 'utf8', (err, content) =>
+        console.log err if err?
+        style = @compilers.stylus(content, file.origFile)
+        file._imports = []
+        paths = style.options._imports = []
+        style.render (err, css) ->
           console.log err if err?
-          style = stylusCompile(content, file.origFile)
-          file._imports = []
-          paths = style.options._imports = []
-          style.render (err, css) ->
-            console.log err if err?
-            for path in paths
-              if path.path
-                fs.stat path.path, (err, stats) ->
-                  console.log if err?
-                  file._imports.push
-                    file: path.path
-                    mtime: stats.mtime
-                  cb()
-              else
+          async.forEach(paths, (path, cb) ->
+            if path.path
+              fs.stat path.path, (err, stats) ->
+                console.log if err?
+                file._imports.push
+                  file: path.path
+                  mtime: stats.mtime
                 cb()
-    , ->
-      # All complete
-    )
+            else
+              cb()
+          , ->
+            return fn()
+          )
+    else
+      return fn()
 
 module.exports = OnTheFlyCompiler

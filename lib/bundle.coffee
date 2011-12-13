@@ -71,8 +71,8 @@ class Bundle
     return filename
 
 
-  _compile: (file, writeTo) ->
-    compiler.compileFile(file, (err, content) ->
+  _compile: (file, writeTo) =>
+    compiler.compileFile(@options.compilers, file, (err, content) ->
       writeToFile(writeTo, content)
     )
     return writeTo

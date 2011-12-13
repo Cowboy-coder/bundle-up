@@ -1,27 +1,21 @@
 fs = require 'fs'
-coffee = require 'coffee-script'
-stylus = require 'stylus'
 
-exports.stylusCompile = stylusCompile = (content, file) ->
-  return stylus(content)
-  .set('filename', file)
-
-exports.compile = compile = (content, file, cb) ->
+exports.compile = compile = (compilers, content, file, cb) ->
   fileExt = file.split('.')
   fileExt = fileExt[fileExt.length - 1]
 
   switch fileExt
     when 'coffee'
-      return cb(null, coffee.compile(content))
+      return cb(null, compilers.coffee(content))
     when 'styl'
-      stylusCompile(content, file).render (err, css) ->
+      compilers.stylus(content, file).render (err, css) ->
         console.log err.message if(err)
         return cb(err, css)
     when 'css'
-      return cb(null, content)
+      return cb(null, compilers.css(content))
     when 'js'
-      return cb(null, content)
+      return cb(null, compilers.js(content))
 
-exports.compileFile =  (file, cb) ->
+exports.compileFile =  (compilers, file, cb) ->
   content = fs.readFileSync(file, 'utf-8')
-  return compile(content, file, cb)
+  return compile(compilers, content, file, cb)
