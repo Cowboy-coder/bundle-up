@@ -4,7 +4,6 @@ Js = require './../lib/js'
 Css = require './../lib/css'
 helper = require './helper'
 fs = require 'fs'
-touch = require 'touch'
 express = require 'express'
 request = require 'request'
 
@@ -67,7 +66,10 @@ describe 'OnTheFlyCompiler', ->
     expect(file.origFile).toEqual(__dirname + '/files/stylus/main.styl')
     request.get 'http://localhost:1338/generated/stylus/main.css', (err, res) ->
       beforeTime = (fs.statSync __dirname + '/files/stylus/typography.styl').mtime
-      touch.sync(__dirname + '/files/stylus/typography.styl', force:true)
+
+      oldContent = fs.readFileSync __dirname + '/files/stylus/typography.styl', 'utf8'
+      fs.writeFileSync __dirname + '/files/stylus/typography.styl', oldContent + '\n', 'utf8'
+
       afterTime = (fs.statSync __dirname + '/files/stylus/typography.styl').mtime
 
       request.get 'http://localhost:1338/generated/stylus/main.css', (err, res) ->
@@ -79,5 +81,8 @@ describe 'OnTheFlyCompiler', ->
         importedFile = file._imports[1]
         expect(importedFile.file).toEqual(__dirname + '/files/stylus/typography.styl')
         expect(importedFile.mtime).toEqual(afterTime)
+
+        # Clean up
+        fs.writeFileSync __dirname + '/files/stylus/typography.styl', oldContent, 'utf8'
         jasmine.asyncSpecDone()
     jasmine.asyncSpecWait()
