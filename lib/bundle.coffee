@@ -32,9 +32,63 @@ class Bundle
     fileExt = fileExt[fileExt.length - 1]
     return  fileExt != 'js' and fileExt != 'css'
 
+  addFilesBasedOnFilter: (filterPath) ->
+    directoryPath = filterPath.substring(0, filterPath.indexOf('*'))
+
+    searchFiles = filterPath.substring(filterPath.indexOf('*.') + 1)
+    searchFiles = undefined if searchFiles == filterPath
+    searchNested = filterPath.indexOf('**') > -1
+
+
+    foundFiles = []
+    directoryFind = (dir, retrying=false) ->
+      try
+        files = fs.readdirSync(dir)
+
+        for file in files
+          file = dir + '/' + file
+          if file.indexOf('.') > -1
+            if searchFiles
+              if file.indexOf(searchFiles) > -1
+                foundFiles.push file
+            else
+              foundFiles.push file
+
+          else if searchNested
+            directoryFind(file)
+      catch err
+        if err.code == 'ENOENT'
+          unless retrying
+            # We need to retry to see if it matches a directory
+            # based on a earlier directory in the path. As an
+            # example "/path/to/dir* should match /path/to/directory/
+            closestDir = dir.split("/")
+            dir = closestDir.splice(0, closestDir.length-1).join("/")
+            searchFiles = dir + "/" + closestDir.splice(closestDir.length-1).join("")
+            searchNested = true
+            directoryFind(dir, true)
+          else
+            # Found no files when retrying either...
+            return
+        else
+          console.log err
+    directoryFind(directoryPath)
+
+    for file in foundFiles
+      @addFile(file)
+
 
   addFile:(file) =>
     file = path.normalize(file)
+
+    for f in @files
+      # File already exists!
+      return if file == f.origFile
+
+    # Check if the file is a "filter path"
+    if file.indexOf('*') > -1
+      return @addFilesBasedOnFilter(file)
+
     relativeFile = @_getRelativePath(file)
     origFile = file
     needsCompiling = false

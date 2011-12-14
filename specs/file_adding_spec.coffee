@@ -103,3 +103,43 @@ describe 'When adding files', ->
       works = true
       expect(beforeStat[key]).toEqual(afterStat[key])
     expect(works).toBeTruthy()
+
+  it 'should only add the file once when adding the same file twice', ->
+    @js.addFile(__dirname + '/files/coffee/1.coffee')
+    @js.addFile(__dirname + '/files/coffee/1.coffee')
+
+    expect(@js.files.length).toEqual(1)
+    file = @js.files[0]
+    expect(file.file).toEqual("#{__dirname}/files/public/generated/coffee/1.js")
+    expect(file.origFile).toEqual(__dirname + '/files/coffee/1.coffee')
+    expect(file.url).toEqual('/generated/coffee/1.js')
+
+  describe 'filtered paths', ->
+    it 'should be able to add 1.coffee using files/nested/js/*.coffee', ->
+      @js.addFile(__dirname + '/files/nested/js/*.coffee')
+      expect(@js.files.length).toEqual(1)
+      expect(@js.files[0].origFile).toEqual(__dirname + '/files/nested/js/1.coffee')
+
+    it 'should be able to add all 2 coffee files using files/nested/js/**.coffee', ->
+      @js.addFile(__dirname + '/files/nested/js/**.coffee')
+      expect(@js.files.length).toEqual(2)
+      expect(@js.files[0].origFile).toEqual(__dirname + '/files/nested/js/1.coffee')
+      expect(@js.files[1].origFile).toEqual(__dirname + '/files/nested/js/sub/2.coffee')
+
+    it 'should be able to add all 6 files using files/coffee/js/**', ->
+      @js.addFile(__dirname + '/files/nested/js/**')
+      expect(@js.files.length).toEqual(6)
+      expect(@js.files[0].origFile).toEqual(__dirname + '/files/nested/js/1.coffee')
+      expect(@js.files[1].origFile).toEqual(__dirname + '/files/nested/js/1.js')
+      expect(@js.files[2].origFile).toEqual(__dirname + '/files/nested/js/sub/2.coffee')
+      expect(@js.files[3].origFile).toEqual(__dirname + '/files/nested/js/sub/2.js')
+      expect(@js.files[4].origFile).toEqual(__dirname + '/files/nested/js/sub/sub2/3.js')
+      expect(@js.files[5].origFile).toEqual(__dirname + '/files/nested/js/sub/sub2/4.js')
+
+    it 'should add 0 files when trying /files/invalid*', ->
+      @js.addFile(__dirname + '/files/invalid*')
+      expect(@js.files.length).toEqual(0)
+
+    it 'should add 6 files when trying /files/nested/j*', ->
+      @js.addFile(__dirname + '/files/nested/j*')
+      expect(@js.files.length).toEqual(6)
