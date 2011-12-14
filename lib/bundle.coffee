@@ -74,6 +74,7 @@ class Bundle
           console.log err
     directoryFind(directoryPath)
 
+    foundFiles = foundFiles.sort()
     for file in foundFiles
       @addFile(file)
 
