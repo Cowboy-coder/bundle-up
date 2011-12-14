@@ -59,6 +59,17 @@ All bundles are generated during startup. The filename will change with the cont
 
 All files that needs to be compiled, copied (if you are bundling up a file that doesn't reside in your `public/` directory) or bundled will end up in `public/generated/` directory. This is to have an organized way to separate whats actually *your code* and whats *generated code*.
 
+### Filtered paths
+
+All files can be added in a directory by using a "filtered path" like this
+
+``` js
+assets.addJs(__dirname + "/public/js/**") //adds all files in /public/js (subdirectories included)
+assets.addJs(__dirname + "/public/*.js") //adds all js files in /public
+assets.addJs(__dirname + "/cs/**.coffee") //adds all coffee files in /cs (subdirectories included)
+});
+```
+
 Usage
 -----
 
@@ -75,7 +86,6 @@ The first parameter is the app object and the second is the path to the assets f
 TODO
 ----
 
- * Add support for addCss("folder/\*.css") and addJs("**.coffee") etc.
  * Add support for namespaced assets
 
 LICENSE
