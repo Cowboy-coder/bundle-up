@@ -11,7 +11,7 @@ Bundle up is a middleware for connect to manage all client-side assets in an org
 ``` js
 // assets.js
 module.exports = function(assets) {
-  assets.root = __dirname
+  assets.root = __dirname;
   assets.addJs("/public/js/jquery-1.6.4.min.js");
   assets.addJs("/public/js/jquery.placeholder.min.js");
   assets.addJs("/app/client/main.coffee");
@@ -66,9 +66,9 @@ All files can be added in a directory by using a "filtered path" like this
 ``` js
 // assets.js
 module.exports = function(assets) {
-  assets.addJs(__dirname + "/public/js/**") //adds all files in /public/js (subdirectories included)
-  assets.addJs(__dirname + "/public/*.js") //adds all js files in /public
-  assets.addJs(__dirname + "/cs/**.coffee") //adds all coffee files in /cs (subdirectories included)
+  assets.addJs(__dirname + "/public/js/**"); //adds all files in /public/js (subdirectories included)
+  assets.addJs(__dirname + "/public/*.js"); //adds all js files in /public
+  assets.addJs(__dirname + "/cs/**.coffee"); //adds all coffee files in /cs (subdirectories included)
 });
 ```
 ### Namespaces
@@ -79,13 +79,13 @@ namespaces can be used
 ``` js
 // assets.js
 module.exports = function(assets) {
-  assets.addJs(__dirname + "/public/js/1.js")
-  assets.addJs(__dirname + "/public/js/2.js")
-  assets.addJs(__dirname + "/public/locales/en_US.js", "en_US")
+  assets.addJs(__dirname + "/public/js/1.js");
+  assets.addJs(__dirname + "/public/js/2.js");
+  assets.addJs(__dirname + "/public/locales/en_US.js", "en_US");
 
-  assets.addJs(__dirname + "/public/css/1.css")
-  assets.addJs(__dirname + "/public/css/2.css")
-  assets.addJs(__dirname + "/public/css/ie.css", 'ie')
+  assets.addJs(__dirname + "/public/css/1.css");
+  assets.addJs(__dirname + "/public/css/2.css");
+  assets.addJs(__dirname + "/public/css/ie.css", 'ie');
 });
 ```
 
@@ -110,7 +110,6 @@ which will render this with `bundle:false`:
 <script src='/js/1.js' type='text/javascript'></script>
 <script src='/js/2.js' type='text/javascript'></script>
 <script src='/locales/en_US.js' type='text/javascript'></script>
-<script src='/generated/app/client/main.js' type='text/javascript'></script>
 ```
 
 and this with `bundle:true`:
