@@ -8,6 +8,7 @@ class Bundle
   constructor: (@options) ->
     @options.staticRoot = path.normalize(@options.staticRoot)
     @files = []
+    @defaultNamespace = 'global'
 
   # Gets relative path from staticRoot. If the
   # file passed in resides in another folder
@@ -79,7 +80,7 @@ class Bundle
       @addFile(file, namespace)
 
 
-  addFile:(file, namespace='global') =>
+  addFile:(file, namespace=@defaultNamespace) =>
     file = path.normalize(file)
 
     for f in @files
@@ -135,7 +136,7 @@ class Bundle
     for file in files
       bundles.push file.namespace unless file.namespace in bundles
 
-    @addFile(toBundle(bundle, files)) for bundle in bundles
+    @addFile(toBundle(bundle, files), bundle) for bundle in bundles
 
   _compile: (file, writeTo) =>
     compiler.compileFile(@options.compilers, file, (err, content) ->

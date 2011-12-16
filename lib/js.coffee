@@ -9,11 +9,12 @@ class Js extends Bundle
     # that doesn't break the code
     return code
 
-  render: () ->
+  render: (namespace) ->
     js = ''
     for file in @files
+      if file.namespace == namespace
         js += "<script src='#{file.url}' type='text/javascript'></script>"
-    js
+    return js
 
   _convertFilename: (filename) ->
     splitted = filename.split('.')

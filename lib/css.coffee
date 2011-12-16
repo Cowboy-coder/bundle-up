@@ -8,11 +8,12 @@ class Css extends Bundle
   minify: (code) ->
     return csso.justDoIt(code)
 
-  render: ->
+  render: (namespace) ->
     style = ''
     for file in @files
+      if file.namespace == namespace
         style += "<link href='#{file.url}' rel='stylesheet' type='text/css'/>"
-    style
+    return style
 
   _convertFilename: (filename) ->
     splitted = filename.split('.')

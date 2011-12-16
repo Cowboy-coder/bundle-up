@@ -49,3 +49,6 @@ describe 'Namespaces', ->
       expect(@bundle.js.files.length).toEqual(2)
       expect(@bundle.js.files[0].origFile).toContain('global.js')
       expect(@bundle.js.files[1].origFile).toContain('custom_namespace.js')
+
+      expect(@bundle.js.files[0].namespace).toEqual('global')
+      expect(@bundle.js.files[1].namespace).toEqual('custom_namespace')

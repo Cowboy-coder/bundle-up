@@ -27,12 +27,12 @@ class BundleUp
       # Compile files on-the-fly when not bundled
       @app.use (new OnTheFlyCompiler(@js, @css, options.compilers)).middleware
 
-    @app.use @middleware
-    
-  middleware: (req, res, next) =>
-    res.local('renderStyles', @css.render())
-    res.local('renderJs', @js.render())
-    next()
+    @app.helpers(
+      renderStyles: (namespace=@css.defaultNamespace) =>
+        return @css.render(namespace)
+      renderJs: (namespace=@js.defaultNamespace) =>
+        return @js.render(namespace)
+    )
 
 module.exports = (app, assetPath, options)->
   new BundleUp(app, assetPath, options)
