@@ -27,9 +27,9 @@ Just point to a file (.js, .css, .coffee or .styl are currently supported) anywh
 !!!
 html
   head
-    != renderStyles
+    != renderStyles()
   body!= body
-  != renderJs
+  != renderJs()
 ```
 
 By default this will render
@@ -71,7 +71,56 @@ module.exports = function(assets) {
   assets.addJs(__dirname + "/cs/**.coffee") //adds all coffee files in /cs (subdirectories included)
 });
 ```
+### Namespaces
 
+Sometimes all javascript or css files cannot be bundled into the same bundle. In that case
+namespaces can be used
+
+``` js
+// assets.js
+module.exports = function(assets) {
+  assets.addJs(__dirname + "/public/js/1.js")
+  assets.addJs(__dirname + "/public/js/2.js")
+  assets.addJs(__dirname + "/public/locales/en_US.js", "en_US")
+
+  assets.addJs(__dirname + "/public/css/1.css")
+  assets.addJs(__dirname + "/public/css/2.css")
+  assets.addJs(__dirname + "/public/css/ie.css", 'ie')
+});
+```
+
+``` jade
+!!!
+html
+  head
+    != renderStyles()
+    != renderStyles('ie')
+  body!= body
+  != renderJs()
+  != renderJs('en_US')
+```
+
+which will render this with `bundle:false`:
+
+``` html
+<link href='/css/1.css' media='screen' rel='stylesheet' type='text/css'/>
+<link href='/css/2.css' media='screen' rel='stylesheet' type='text/css'/>
+<link href='/css/ie.css' media='screen' rel='stylesheet' type='text/css'/>
+
+<script src='/js/1.js' type='text/javascript'></script>
+<script src='/js/2.js' type='text/javascript'></script>
+<script src='/locales/en_US.js' type='text/javascript'></script>
+<script src='/generated/app/client/main.js' type='text/javascript'></script>
+```
+
+and this with `bundle:true`:
+
+``` html
+<link href='/generated/bundle/d7aa56c_global.css' media='screen' rel='stylesheet' type='text/css'/>
+<link href='/generated/bundle/d7aa56c_ie.css' media='screen' rel='stylesheet' type='text/css'/>
+<script src='/generated/bundle/1e4b515_global.js' type='text/javascript'></script>
+<script src='/generated/bundle/1e4b515_en_US.js' type='text/javascript'></script>
+```
 Usage
 -----
 
@@ -85,12 +134,7 @@ BundleUp(app, __dirname + "/assets", {
 
 The first parameter is the app object and the second is the path to the assets file
 
-TODO
-----
-
- * Add support for namespaced assets
-
-LICENSE
+License
 -------
 
 MIT licensed
