@@ -21,13 +21,8 @@ class BundleUp
     require(assetPath)(new AssetsManager(@css, @js))
 
     if options.bundle
-      filename = @js.toBundle('global.js')
-      @js.files = []
-      @js.addFile("#{options.staticRoot}/generated/bundle/#{filename}")
-
-      filename = @css.toBundle('global.css')
-      @css.files = []
-      @css.addFile("#{options.staticRoot}/generated/bundle/#{filename}")
+      @js.toBundles()
+      @css.toBundles()
     else
       # Compile files on-the-fly when not bundled
       @app.use (new OnTheFlyCompiler(@js, @css, options.compilers)).middleware

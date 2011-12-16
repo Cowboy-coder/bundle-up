@@ -2,6 +2,7 @@ csso = require 'csso'
 Bundle = require './bundle'
 class Css extends Bundle
   constructor: (@options) ->
+    @fileExtension = '.css'
     super
 
   minify: (code) ->

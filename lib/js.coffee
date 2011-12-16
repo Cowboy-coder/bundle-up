@@ -1,6 +1,7 @@
 Bundle = require './bundle'
 class Js extends Bundle
   constructor: (@options) ->
+    @fileExtension = '.js'
     super
 
   minify: (code) ->

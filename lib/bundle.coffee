@@ -32,7 +32,7 @@ class Bundle
     fileExt = fileExt[fileExt.length - 1]
     return  fileExt != 'js' and fileExt != 'css'
 
-  addFilesBasedOnFilter: (filterPath) ->
+  addFilesBasedOnFilter: (filterPath, namespace) ->
     directoryPath = filterPath.substring(0, filterPath.indexOf('*'))
 
     searchFiles = filterPath.substring(filterPath.indexOf('*.') + 1)
@@ -62,9 +62,9 @@ class Bundle
             # We need to retry to see if it matches a directory
             # based on a earlier directory in the path. As an
             # example "/path/to/dir* should match /path/to/directory/
-            closestDir = dir.split("/")
-            dir = closestDir.splice(0, closestDir.length-1).join("/")
-            searchFiles = dir + "/" + closestDir.splice(closestDir.length-1).join("")
+            closestDir = dir.split('/')
+            dir = closestDir.splice(0, closestDir.length-1).join('/')
+            searchFiles = dir + '/' + closestDir.splice(closestDir.length-1).join('')
             searchNested = true
             directoryFind(dir, true)
           else
@@ -76,10 +76,10 @@ class Bundle
 
     foundFiles = foundFiles.sort()
     for file in foundFiles
-      @addFile(file)
+      @addFile(file, namespace)
 
 
-  addFile:(file) =>
+  addFile:(file, namespace='global') =>
     file = path.normalize(file)
 
     for f in @files
@@ -88,7 +88,7 @@ class Bundle
 
     # Check if the file is a "filter path"
     if file.indexOf('*') > -1
-      return @addFilesBasedOnFilter(file)
+      return @addFilesBasedOnFilter(file, namespace)
 
     relativeFile = @_getRelativePath(file)
     origFile = file
@@ -110,21 +110,32 @@ class Bundle
       file: file
       origFile: origFile
       needsCompiling: needsCompiling
+      namespace: namespace
 
-  toBundle: (filename) =>
-    str = ''
-    for file in @files
-      @_compile(file.origFile, file.file)
-      str += fs.readFileSync(file.file, 'utf-8').trim('\n') + '\n'
+  toBundles: =>
+    toBundle = (namespace, files) =>
+      str = ''
+      for file in files
+        if file.namespace == namespace
+          @_compile(file.origFile, file.file)
+          str += fs.readFileSync(file.file, 'utf-8').trim('\n') + '\n'
 
-    str = @minify(str)
-    hash = crypto.createHash('md5').update(str).digest('hex')
-    filename = "#{hash.substring(0, 7)}_#{filename}"
+      str = @minify(str)
+      hash = crypto.createHash('md5').update(str).digest('hex')
+      filepath = "#{@options.staticRoot}/generated/bundle/#{hash.substring(0, 7)}_#{namespace}#{@fileExtension}"
 
+      writeToFile(filepath, str)
 
-    writeToFile("#{@options.staticRoot}generated/bundle/#{filename}", str)
-    return filename
+      return filepath
 
+    files = @files
+    @files = []
+
+    bundles = []
+    for file in files
+      bundles.push file.namespace unless file.namespace in bundles
+
+    @addFile(toBundle(bundle, files)) for bundle in bundles
 
   _compile: (file, writeTo) =>
     compiler.compileFile(@options.compilers, file, (err, content) ->
