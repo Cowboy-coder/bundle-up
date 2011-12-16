@@ -1,12 +1,26 @@
 Bundle up!  [![Build Status](https://secure.travis-ci.org/Cowboy-coder/bundle-up.png)](https://secure.travis-ci.org/Cowboy-coder/bundle-up)
 ==========
 
+Bundle up is a middleware for connect to manage all client-side assets in an organized way.
+
 Installation
 ------------
 
     $ npm install bundle-up
 
-Bundle up is a middleware for connect to manage all client-side assets in an organized way. Everything is manged using an assets file
+Usage
+-----
+
+``` js
+BundleUp(app, __dirname + "/assets", {
+  staticRoot: __dirname + "/public/",
+  staticUrlRoot:"/",
+  bundle:true
+});
+```
+
+The first parameter is the app object and the second is the path to the assets file. Through
+the assets file all client-side assets needs to get added.
 
 ``` js
 // assets.js
@@ -120,18 +134,6 @@ and this with `bundle:true`:
 <script src='/generated/bundle/1e4b515_global.js' type='text/javascript'></script>
 <script src='/generated/bundle/1e4b515_en_US.js' type='text/javascript'></script>
 ```
-Usage
------
-
-``` js
-BundleUp(app, __dirname + "/assets", {
-  staticRoot: __dirname + "/public/",
-  staticUrlRoot:"/",
-  bundle:true
-});
-```
-
-The first parameter is the app object and the second is the path to the assets file
 
 License
 -------
