@@ -43,6 +43,7 @@ class OnTheFlyCompiler
     # Check modified timestamp on file
     fs.stat file.origFile, (err, destStats) =>
       if not file._mtime
+        file._mtime = destStats.mtime
         return @compileFile(file, fn)
       if file._mtime < destStats.mtime
         return @compileFile(file, fn)
