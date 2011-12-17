@@ -43,7 +43,7 @@ html
   head
     != renderStyles()
   body!= body
-  != renderJs()
+    != renderJs()
 ```
 
 By default this will render
@@ -110,8 +110,8 @@ html
     != renderStyles()
     != renderStyles('ie')
   body!= body
-  != renderJs()
-  != renderJs('en_US')
+    != renderJs()
+    != renderJs('en_US')
 ```
 
 which will render this with `bundle:false`:
