@@ -103,7 +103,6 @@ class OnTheFlyCompiler
         file._imports = []
         paths = style.options._imports = []
         style.render (err, css) ->
-          console.log err if err?
           async.forEach(paths, (path, cb) ->
             if path.path
               fs.stat path.path, (err, stats) ->

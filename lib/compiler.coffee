@@ -6,10 +6,16 @@ exports.compile = compile = (compilers, content, file, cb) ->
 
   switch fileExt
     when 'coffee'
-      return cb(null, compilers.coffee(content))
+      try
+        return cb(null, compilers.coffee(content, file))
+      catch err
+        console.log file + ':\n  ' + err.message + "\n"
+        return cb(err, err.message)
     when 'styl'
       compilers.stylus(content, file).render (err, css) ->
-        console.log err.message if(err)
+        if err?
+          console.log err.message
+          css = err.message
         return cb(err, css)
     when 'css'
       return cb(null, compilers.css(content))

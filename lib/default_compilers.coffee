@@ -5,7 +5,7 @@ module.exports =
   stylus: (content, file) ->
     return stylus(content)
     .set('filename', file)
-  coffee: (content) ->
+  coffee: (content, file) ->
     return coffee.compile(content)
   js: (content) ->
     return content
