@@ -17,10 +17,13 @@ BundleUp(app, __dirname + "/assets", {
   staticUrlRoot:"/",
   bundle:true
 });
+
+// To actually serve the files a static file
+// server needs to be added after Bundle Up
+app.use(express.static(__dirname + "/public/"))
 ```
 
-The first parameter is the app object and the second is the path to the assets file. Through
-the assets file all client-side assets needs to get added.
+The first parameter to the BundleUp middleware is the app object and the second is the path to the assets file. Through the assets file all client-side assets needs to get added.
 
 ``` js
 // assets.js
