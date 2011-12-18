@@ -25,11 +25,12 @@ writeToFile = (file, content) ->
     else
       console.log e
 
-# 
-# This is fancy
-#
 normalizeUrl = (url) ->
-  return url.replace('//', '/')
+  protocol = url.match(/^(http|https):\/\//)?[0]
+  protocol = '' unless protocol?
+  url = url.replace(protocol, '')
+  url = url.replace('//', '/')
+  return protocol + url
 
 exports.writeToFile = writeToFile
 exports.normalizeUrl = normalizeUrl
