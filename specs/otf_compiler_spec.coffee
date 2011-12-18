@@ -41,7 +41,14 @@ describe 'OnTheFlyCompiler', ->
 
   it 'should compile coffee files correctly', ->
     request.get 'http://localhost:1338/generated/coffee/1.js', (err, res) ->
-      expected = "\n  console.log('1');\n"
+      expected = '''
+      (function() {
+
+        console.log('1');
+
+      }).call(this);
+
+      '''
       expect(res.body).toEqual(expected)
       jasmine.asyncSpecDone()
     jasmine.asyncSpecWait()
