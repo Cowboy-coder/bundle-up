@@ -48,7 +48,7 @@ class Bundle
 
         for file in files
           file = dir + '/' + file
-          if file.indexOf('.') > -1
+          unless fs.lstatSync(file).isDirectory()
             if searchFiles
               if file.indexOf(searchFiles) > -1
                 foundFiles.push file
