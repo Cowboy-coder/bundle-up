@@ -93,3 +93,28 @@ describe 'OnTheFlyCompiler', ->
         fs.writeFileSync __dirname + '/files/stylus/typography.styl', oldContent, 'utf8'
         jasmine.asyncSpecDone()
     jasmine.asyncSpecWait()
+
+  describe 'Error handling', ->
+    it 'should respond with 500 when requesting a coffee file with syntax errors', ->
+      bundle.js.addFile(__dirname + '/files/coffee/syntax_error.coffee')
+      request.get 'http://localhost:1338/generated/coffee/syntax_error.js', (err, res) ->
+        expect(res.statusCode).toEqual(500)
+
+        jasmine.asyncSpecDone()
+      jasmine.asyncSpecWait()
+
+    it 'should respond with 500 when requesting a stylus file with syntax errors', ->
+      bundle.css.addFile(__dirname + '/files/stylus/syntax_error.styl')
+      request.get 'http://localhost:1338/generated/stylus/syntax_error.css', (err, res) ->
+        expect(res.statusCode).toEqual(500)
+
+        jasmine.asyncSpecDone()
+      jasmine.asyncSpecWait()
+
+    it 'should respond with 500 when requesting a file not found', ->
+      bundle.js.addFile(__dirname + '/files/coffee/not_found.coffee')
+      request.get 'http://localhost:1338/generated/coffee/not_found.js', (err, res) ->
+        expect(res.statusCode).toEqual(500)
+
+        jasmine.asyncSpecDone()
+      jasmine.asyncSpecWait()

@@ -21,27 +21,31 @@ class OnTheFlyCompiler
     if req.url.indexOf('.js') > -1
       for file, i in @js.files
         if req.url == file.url
-          return @handleFile(file, -> next())
+          return @handleFile(file, (err) -> next(err))
         else
           return next() if i == (@js.files.length - 1)
 
     else if req.url.indexOf('.css') > -1
       for file, i in @css.files
         if req.url == file.url
-          return @handleFile(file, -> next()) if req.url == file.url
+          return @handleFile(file, (err) -> next(err)) if req.url == file.url
         else
           return next() if i == (@css.files.length - 1)
     return next()
 
   handleFile: (file, fn) =>
     if not file._importChecked
-      @mapImports file, =>
+      @mapImports file, (err) =>
+        return fn(err) if err?
+
         file._importChecked = true
         return @handleFile(file, fn)
       return
 
     # Check modified timestamp on file
     fs.stat file.origFile, (err, destStats) =>
+      return fn(err) if err?
+
       if not file._mtime
         file._mtime = destStats.mtime
         return @compileFile(file, fn)
@@ -60,7 +64,9 @@ class OnTheFlyCompiler
               importedFile.mtime = stats.mtime
               changed.push importedFile
             return cb()
-        ,  ->
+        , (err) ->
+          return fn(err) if err?
+
           if changed.length > 0
             return compileFile(file, fn)
           else
@@ -73,9 +79,15 @@ class OnTheFlyCompiler
     return fn() unless file.needsCompiling
 
     fs.readFile file.origFile, 'utf8', (err, content) =>
+      return fn(err) if err?
       compile @compilers, content, file.origFile, (err, newContent) =>
-        @writeToFile file.file, newContent, ->
+        return fn(err) if err?
+        @writeToFile file.file, newContent, (err) ->
+          return fn(err) if err?
+
           fs.stat file.origFile, (err, stats) ->
+            return fn(err) if err?
+
             file._mtime = stats.mtime
             return fn()
 
@@ -85,12 +97,10 @@ class OnTheFlyCompiler
         if err.code == 'ENOENT'
           splitted = file.split('/')
           mkdirp splitted.splice(0, splitted.length-1).join('/'), 0777, (err) =>
-            if err?
-              console.log err
-            else
-              return @writeToFile(file, content, fn)
+            return fn(err) if err?
+            return @writeToFile(file, content, fn)
         else
-          console.log err
+          return fn(err)
       else
         return fn()
 
@@ -98,7 +108,7 @@ class OnTheFlyCompiler
     # Need to map imports for stylus files
     if file.origFile.indexOf('.styl') > -1
       fs.readFile file.origFile, 'utf8', (err, content) =>
-        console.log err if err?
+        return fn(err) if err?
         style = @compilers.stylus(content, file.origFile)
         file._imports = []
         paths = style.options._imports = []
@@ -106,15 +116,15 @@ class OnTheFlyCompiler
           async.forEach(paths, (path, cb) ->
             if path.path
               fs.stat path.path, (err, stats) ->
-                console.log if err?
+                return cb(err) if err?
                 file._imports.push
                   file: path.path
                   mtime: stats.mtime
                 cb()
             else
               cb()
-          , ->
-            return fn()
+          , (err) ->
+            return fn(err)
           )
     else
       return fn()

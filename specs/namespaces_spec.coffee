@@ -28,10 +28,11 @@ describe 'Namespaces', ->
   it 'should add the correct namespaces when using filtered paths', ->
     @js.addFile(__dirname + '/files/coffee/*.coffee', 'namespace1')
 
-    expect(@js.files.length).toEqual(3)
+    expect(@js.files.length).toEqual(4)
     expect(@js.files[0].namespace).toEqual('namespace1')
     expect(@js.files[1].namespace).toEqual('namespace1')
     expect(@js.files[2].namespace).toEqual('namespace1')
+    expect(@js.files[3].namespace).toEqual('namespace1')
 
   describe 'bundle:true', ->
     beforeEach ->

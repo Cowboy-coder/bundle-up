@@ -140,6 +140,7 @@ class Bundle
 
   _compile: (file, writeTo) =>
     compiler.compileFile(@options.compilers, file, (err, content) ->
+      throw err if err?
       writeToFile(writeTo, content)
     )
     return writeTo
