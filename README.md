@@ -12,15 +12,17 @@ Usage
 -----
 
 ``` js
-BundleUp(app, __dirname + "/assets", {
-  staticRoot: __dirname + "/public/",
-  staticUrlRoot:"/",
+var BundleUp = require('bundle-up');
+
+BundleUp(app, __dirname + '/assets', {
+  staticRoot: __dirname + '/public/',
+  staticUrlRoot:'/',
   bundle:true
 });
 
 // To actually serve the files a static file
 // server needs to be added after Bundle Up
-app.use(express.static(__dirname + "/public/"))
+app.use(express.static(__dirname + '/public/'))
 ```
 
 The first parameter to the BundleUp middleware is the app object and the second is the path to the assets file. Through the assets file all client-side assets needs to get added.
@@ -29,12 +31,12 @@ The first parameter to the BundleUp middleware is the app object and the second 
 // assets.js
 module.exports = function(assets) {
   assets.root = __dirname;
-  assets.addJs("/public/js/jquery-1.6.4.min.js");
-  assets.addJs("/public/js/jquery.placeholder.min.js");
-  assets.addJs("/app/client/main.coffee");
+  assets.addJs('/public/js/jquery-1.6.4.min.js');
+  assets.addJs('/public/js/jquery.placeholder.min.js');
+  assets.addJs('/app/client/main.coffee');
 
-  assets.addCss("/public/bootstrap/bootstrap.min.css");
-  assets.addCss("/app/styles/screen.styl");
+  assets.addCss('/public/bootstrap/bootstrap.min.css');
+  assets.addCss('/app/styles/screen.styl');
 }
 ```
 
@@ -83,9 +85,9 @@ All files can be added in a directory by using a "filtered path" like this
 ``` js
 // assets.js
 module.exports = function(assets) {
-  assets.addJs(__dirname + "/public/js/**"); //adds all files in /public/js (subdirectories included)
-  assets.addJs(__dirname + "/public/*.js"); //adds all js files in /public
-  assets.addJs(__dirname + "/cs/**.coffee"); //adds all coffee files in /cs (subdirectories included)
+  assets.addJs(__dirname + '/public/js/**'); //adds all files in /public/js (subdirectories included)
+  assets.addJs(__dirname + '/public/*.js'); //adds all js files in /public
+  assets.addJs(__dirname + '/cs/**.coffee'); //adds all coffee files in /cs (subdirectories included)
 });
 ```
 ### Namespaces
@@ -96,13 +98,13 @@ namespaces can be used
 ``` js
 // assets.js
 module.exports = function(assets) {
-  assets.addJs(__dirname + "/public/js/1.js");
-  assets.addJs(__dirname + "/public/js/2.js");
-  assets.addJs(__dirname + "/public/locales/en_US.js", "en_US");
+  assets.addJs(__dirname + '/public/js/1.js');
+  assets.addJs(__dirname + '/public/js/2.js');
+  assets.addJs(__dirname + '/public/locales/en_US.js', 'en_US');
 
-  assets.addJs(__dirname + "/public/css/1.css");
-  assets.addJs(__dirname + "/public/css/2.css");
-  assets.addJs(__dirname + "/public/css/ie.css", 'ie');
+  assets.addJs(__dirname + '/public/css/1.css');
+  assets.addJs(__dirname + '/public/css/2.css');
+  assets.addJs(__dirname + '/public/css/ie.css', 'ie');
 });
 ```
 
