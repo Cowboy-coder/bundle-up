@@ -1,20 +1,22 @@
 Bundle = require './bundle'
+UglifyJS = require 'uglify-js'
 class Js extends Bundle
   constructor: (@options) ->
     @fileExtension = '.js'
     super
 
   minify: (code) ->
-    # Haven't found any nice minifier
-    # that doesn't break the code
-    return code
+    ast = UglifyJS.parser.parse code # parse code and get the initial AST
+    ast = UglifyJS.uglify.ast_mangle ast # get a new AST with mangled names
+    ast = UglifyJS.uglify.ast_squeeze ast # get an AST with compression optimizations
+    UglifyJS.uglify.gen_code ast # compressed code here
 
   render: (namespace) ->
     js = ''
     for file in @files
       if file.namespace == namespace
         js += "<script src='#{file.url}' type='text/javascript'></script>"
-    return js
+    js
 
   _convertFilename: (filename) ->
     splitted = filename.split('.')
