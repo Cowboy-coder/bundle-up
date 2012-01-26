@@ -6,6 +6,8 @@ class Js extends Bundle
     super
 
   minify: (code) ->
+    return code unless @options.minifyJs
+
     ast = UglifyJS.parser.parse code # parse code and get the initial AST
     ast = UglifyJS.uglify.ast_mangle ast # get a new AST with mangled names
     ast = UglifyJS.uglify.ast_squeeze ast # get an AST with compression optimizations

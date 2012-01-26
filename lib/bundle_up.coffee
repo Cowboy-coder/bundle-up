@@ -14,6 +14,9 @@ class BundleUp
       options.compilers.js = options.compilers.js || compilers.js
       options.compilers.css = options.compilers.css || compilers.css
 
+    options.minifyCss = options.minifyCss || false
+    options.minifyJs = options.minifyJs || false
+
     @app = app
     @js = new Js(options)
     @css = new Css(options)
