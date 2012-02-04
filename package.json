@@ -24,7 +24,6 @@
   "devDependencies": {
       "mocha": ">= 0.11.0"
     , "expect.js": ">= 0.1.1"
-    , "sinon": ">= 1.2.0"
     , "rimraf": ">= 1.0.8"
     , "express": ">= 2.0.0"
     , "request": ">= 2.2.9"
