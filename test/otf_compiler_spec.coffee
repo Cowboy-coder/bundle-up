@@ -1,4 +1,4 @@
-suite = require 'jasmine-node'
+expect = require 'expect.js'
 BundleUp = require './../index'
 Js = require './../lib/js'
 Css = require './../lib/css'
@@ -12,19 +12,18 @@ describe 'OnTheFlyCompiler', ->
   beforeEach ->
     helper.beforeEach()
     @app = express.createServer()
-    @bundle = BundleUp @app, __dirname + '/files/assets.coffee',
-      staticRoot: __dirname + '/../specs/files/public/',
+    bundle = BundleUp @app, __dirname + '/files/assets.coffee',
+      staticRoot: __dirname + '/files/public/',
       staticUrlRoot:"/",
       bundle:false
-    bundle = @bundle
-    @app.use(express.static( __dirname + '/../specs/files/public/'))
+    @app.use(express.static(__dirname + '/files/public/'))
     
     @app.listen(1338)
 
   afterEach ->
     @app.close()
 
-  it 'should compile stylus files correctly', ->
+  it 'should compile stylus files correctly', (done) ->
     request.get 'http://localhost:1338/generated/stylus/main.css', (err, res) ->
       expected = """
       h1 {
@@ -35,11 +34,10 @@ describe 'OnTheFlyCompiler', ->
       }
 
       """
-      expect(res.body).toEqual(expected)
-      jasmine.asyncSpecDone()
-    jasmine.asyncSpecWait()
+      expect(res.body).to.equal(expected)
+      done()
 
-  it 'should compile coffee files correctly', ->
+  it 'should compile coffee files correctly', (done) ->
     request.get 'http://localhost:1338/generated/coffee/1.js', (err, res) ->
       expected = '''
       (function() {
@@ -49,28 +47,26 @@ describe 'OnTheFlyCompiler', ->
       }).call(this);
 
       '''
-      expect(res.body).toEqual(expected)
-      jasmine.asyncSpecDone()
-    jasmine.asyncSpecWait()
+      expect(res.body).to.equal(expected)
+      done()
 
-  it 'should map imported files for main.styl first time it is requested', =>
+  it 'should map imported files for main.styl first time it is requested', (done) ->
     file = bundle.css.files[0]
-    expect(file.origFile).toEqual(__dirname + '/files/stylus/main.styl')
-    expect(file._imports).toBeUndefined()
+    expect(file.origFile).to.equal(__dirname + '/files/stylus/main.styl')
+    expect(file._imports).to.equal(undefined)
     request.get 'http://localhost:1338/generated/stylus/main.css', (err, res) ->
-      expect(file._imports).toBeDefined()
+      expect(file._imports).to.not.equal(undefined)
       found = false
       for imp in file._imports
         if imp.file == __dirname + '/files/stylus/typography.styl'
           found = true
-      expect(found).toBeTruthy()
+      expect(found).to.equal(true)
 
-      jasmine.asyncSpecDone()
-    jasmine.asyncSpecWait()
+      done()
 
-  it 'should re-compile main.styl when imported file change', ->
+  it 'should re-compile main.styl when imported file change', (done) ->
     file = bundle.css.files[0]
-    expect(file.origFile).toEqual(__dirname + '/files/stylus/main.styl')
+    expect(file.origFile).to.equal(__dirname + '/files/stylus/main.styl')
     request.get 'http://localhost:1338/generated/stylus/main.css', (err, res) ->
       beforeTime = (fs.statSync __dirname + '/files/stylus/typography.styl').mtime
 
@@ -84,37 +80,33 @@ describe 'OnTheFlyCompiler', ->
         # most likely because the content in the file is the same...
         # therefore we make the expectations on the typography file
         # instead
-        expect(beforeTime).toNotEqual(afterTime)
+        expect(beforeTime).to.not.equal(afterTime)
         importedFile = file._imports[1]
-        expect(importedFile.file).toEqual(__dirname + '/files/stylus/typography.styl')
-        expect(importedFile.mtime).toEqual(afterTime)
+        expect(importedFile.file).to.equal(__dirname + '/files/stylus/typography.styl')
+        expect(importedFile.mtime).to.eql(afterTime)
 
         # Clean up
         fs.writeFileSync __dirname + '/files/stylus/typography.styl', oldContent, 'utf8'
-        jasmine.asyncSpecDone()
-    jasmine.asyncSpecWait()
+        done()
 
   describe 'Error handling', ->
-    it 'should respond with 500 when requesting a coffee file with syntax errors', ->
+    it 'should respond with 500 when requesting a coffee file with syntax errors', (done) ->
       bundle.js.addFile(__dirname + '/files/coffee/syntax_error.coffee')
       request.get 'http://localhost:1338/generated/coffee/syntax_error.js', (err, res) ->
-        expect(res.statusCode).toEqual(500)
+        expect(res.statusCode).to.equal(500)
 
-        jasmine.asyncSpecDone()
-      jasmine.asyncSpecWait()
+        done()
 
-    it 'should respond with 500 when requesting a stylus file with syntax errors', ->
+    it 'should respond with 500 when requesting a stylus file with syntax errors', (done) ->
       bundle.css.addFile(__dirname + '/files/stylus/syntax_error.styl')
       request.get 'http://localhost:1338/generated/stylus/syntax_error.css', (err, res) ->
-        expect(res.statusCode).toEqual(500)
+        expect(res.statusCode).to.equal(500)
 
-        jasmine.asyncSpecDone()
-      jasmine.asyncSpecWait()
+        done()
 
-    it 'should respond with 500 when requesting a file not found', ->
+    it 'should respond with 500 when requesting a file not found', (done) ->
       bundle.js.addFile(__dirname + '/files/coffee/not_found.coffee')
       request.get 'http://localhost:1338/generated/coffee/not_found.js', (err, res) ->
-        expect(res.statusCode).toEqual(500)
+        expect(res.statusCode).to.equal(500)
 
-        jasmine.asyncSpecDone()
-      jasmine.asyncSpecWait()
+        done()
