@@ -10,12 +10,10 @@ class BundleUp
       options.compilers = compilers
     else
       options.compilers.stylus = options.compilers.stylus || compilers.stylus
+      options.compilers.less = options.compilers.less || compilers.less
       options.compilers.coffee = options.compilers.coffee || compilers.coffee
       options.compilers.js = options.compilers.js || compilers.js
       options.compilers.css = options.compilers.css || compilers.css
-
-    options.minifyCss = options.minifyCss || false
-    options.minifyJs = options.minifyJs || false
 
     @app = app
     @js = new Js(options)
