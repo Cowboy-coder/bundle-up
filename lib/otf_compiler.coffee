@@ -96,7 +96,7 @@ class OnTheFlyCompiler
       if err
         if err.code == 'ENOENT'
           splitted = file.split('/')
-          mkdirp splitted.splice(0, splitted.length-1).join('/'), 0777, (err) =>
+          mkdirp splitted.splice(0, splitted.length-1).join('/'), 0o0777, (err) =>
             return fn(err) if err?
             return @writeToFile(file, content, fn)
         else

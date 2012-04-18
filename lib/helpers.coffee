@@ -18,7 +18,7 @@ writeToFile = (file, content) ->
   catch e
     if e.code == 'ENOENT' or e.code == 'EBADF'
       splitted = file.split('/')
-      mkdirp.sync(splitted.splice(0, splitted.length-1).join('/'), 0777)
+      mkdirp.sync(splitted.splice(0, splitted.length-1).join('/'), 0o0777)
 
       # Retry!
       writeToFile(file, content)
