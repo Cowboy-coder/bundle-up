@@ -30,7 +30,7 @@ class BundleUp
       # Compile files on-the-fly when not bundled
       @app.use (new OnTheFlyCompiler(@js, @css, options.compilers)).middleware
 
-    @app.helpers(
+    @app.locals(
       renderStyles: (namespace=@css.defaultNamespace) =>
         return @css.render(namespace)
       renderJs: (namespace=@js.defaultNamespace) =>

@@ -18,7 +18,7 @@ describe 'OnTheFlyCompiler', ->
       bundle:false
     @app.use(express.static(__dirname + '/files/public/'))
     
-    @app.listen(1338)
+    @app = @app.listen(1338)
 
   afterEach ->
     @app.close()
