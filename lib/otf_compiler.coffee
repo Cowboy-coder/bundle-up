@@ -126,6 +126,12 @@ class OnTheFlyCompiler
           , (err) ->
             return fn(err)
           )
+    else if file.origFile.indexOf('.less') > -1
+      fs.readFile file.origFile, 'utf8', (err, content) =>
+        return fn(err) if err?
+        style = @compilers.less(content, file.origFile).parse content, (err, tree) ->
+          return fn(err) if err?
+          return fn()
     else
       return fn()
 

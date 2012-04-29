@@ -17,6 +17,13 @@ exports.compile = compile = (compilers, content, file, cb) ->
           console.log err.message
           css = err.message
         return cb(err, css)
+    when 'less'
+      compilers.less(content, file).parse content, (err, tree) ->
+        css = tree.toCSS()
+        if err?
+          console.log err.message
+          css = err.message
+        return cb(err, css)
     when 'css'
       return cb(null, compilers.css(content))
     when 'js'
