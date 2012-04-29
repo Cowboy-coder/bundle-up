@@ -17,7 +17,9 @@ var BundleUp = require('bundle-up');
 BundleUp(app, __dirname + '/assets', {
   staticRoot: __dirname + '/public/',
   staticUrlRoot:'/',
-  bundle:true
+  bundle:true,
+  minifyCss: true,
+  minifyJs: true
 });
 
 // To actually serve the files a static file
