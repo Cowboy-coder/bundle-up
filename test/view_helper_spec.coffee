@@ -34,7 +34,7 @@ describe 'View Helper', ->
     @app.get '/print_namespaceCss', (req, res) ->
       res.render 'printCss.jade', layout:false
 
-    @app = @app.listen(1338)
+    @app.listen(1338)
 
   afterEach ->
     @app.close()
