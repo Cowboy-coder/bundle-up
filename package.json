@@ -2,7 +2,7 @@
   "name": "bundle-up",
   "author": "Fredrik Lindin <fredriklindin@gmail.com>",
   "description": "A simple asset manager middleware for connect",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "repository": {
     "url": ""
   },
