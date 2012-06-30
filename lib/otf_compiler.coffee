@@ -47,7 +47,6 @@ class OnTheFlyCompiler
       return fn(err) if err?
 
       if not file._mtime
-        file._mtime = destStats.mtime
         return @compileFile(file, fn)
       if file._mtime < destStats.mtime
         return @compileFile(file, fn)
