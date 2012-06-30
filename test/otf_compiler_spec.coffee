@@ -6,6 +6,7 @@ helper = require './helper'
 fs = require 'fs'
 express = require 'express'
 request = require 'request'
+async = require 'async'
 
 describe 'OnTheFlyCompiler', ->
   bundle = {}
@@ -88,6 +89,15 @@ describe 'OnTheFlyCompiler', ->
         # Clean up
         fs.writeFileSync __dirname + '/files/stylus/typography.styl', oldContent, 'utf8'
         done()
+
+  it 'should not cause any errors when parallel requests comes in at the same time', (done) ->
+    async.forEach [1..4], (i, cb) ->
+      request.get 'http://localhost:1338/generated/stylus/main.css', (err, res) ->
+        expect(res.statusCode).to.equal(200)
+        cb(err)
+    , (err) ->
+      done(err)
+
 
   describe 'Error handling', ->
     it 'should respond with 500 when requesting a coffee file with syntax errors', (done) ->
