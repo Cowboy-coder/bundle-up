@@ -7,11 +7,7 @@ class Js extends Bundle
 
   minify: (code) ->
     return code unless @options.minifyJs
-
-    ast = UglifyJS.parser.parse code # parse code and get the initial AST
-    ast = UglifyJS.uglify.ast_mangle ast # get a new AST with mangled names
-    ast = UglifyJS.uglify.ast_squeeze ast # get an AST with compression optimizations
-    UglifyJS.uglify.gen_code ast # compressed code here
+    UglifyJS.minify(code, { fromString: true }).code # Minify with UglifyJS (v2)
 
   render: (namespace) ->
     js = ''

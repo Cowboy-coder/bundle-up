@@ -10,10 +10,22 @@ describe 'bundle:true', ->
   beforeEach ->
     helper.beforeEach()
     @app = express.createServer()
+    
+    # Bundle once without minifying and then once _with_ minifying:
+    
     @bundle = BundleUp @app, __dirname + "/files/assets.coffee",
       staticRoot: __dirname + "/files/public/",
       staticUrlRoot:"/",
-      bundle:true
+      bundle:true,
+      minifyJs:false,
+      minifyCss:false
+      
+    @bundle = BundleUp @app, __dirname + "/files/assets.coffee",
+      staticRoot: __dirname + "/files/public/",
+      staticUrlRoot:"/",
+      bundle:true,
+      minifyJs:true,
+      minifyCss:true
 
   describe 'individual files', ->
     it 'should create coffee/1.js', (done) ->
