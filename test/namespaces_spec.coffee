@@ -34,6 +34,14 @@ describe 'Namespaces', ->
     expect(@js.files[2].namespace).to.equal('namespace1')
     expect(@js.files[3].namespace).to.equal('namespace1')
 
+  it 'should add a file two times if in different namespaces', ->
+    @js.addFile(__dirname + '/files/coffee/*.coffee')
+    @js.addFile(__dirname + '/files/coffee/1.coffee', 'namespace1')
+
+    expect(@js.files.length).to.equal(5)
+    expect(@js.files[0].namespace).to.equal('global')
+    expect(@js.files[4].namespace).to.equal('namespace1')
+
   describe 'bundle:true', ->
     beforeEach ->
       @app = express.createServer()

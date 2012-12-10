@@ -84,8 +84,8 @@ class Bundle
     file = path.normalize(file)
 
     for f in @files
-      # File already exists!
-      return if file == f.origFile
+      # File already exists in this namespace!
+      return if file == f.origFile and namespace == f.namespace
 
     # Check if the file is a "filter path"
     if file.indexOf('*') > -1
