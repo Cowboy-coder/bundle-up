@@ -142,6 +142,28 @@ and this with `bundle:true`:
 <script src='/generated/bundle/1e4b515_en_US.js' type='text/javascript'></script>
 ```
 
+### Using CDN
+
+Using bundle-up with a CDN is pretty straight forward. In this example we´ll use a Cloud Front URL as the `staticUrlRoot`.
+
+``` js
+BundleUp(app, __dirname + '/assets', {
+  staticRoot: __dirname + '/public/',
+  staticUrlRoot:'///drhu3hxlexxxx.cloudfront.net/',
+  bundle:true,
+  minifyCss: true,
+  minifyJs: true
+});
+```
+
+When using Express, you can easily have the development environment skip the CDN.
+
+``` js
+var staticUrlRoot = app.get('env') == "production" ? '///drhu3hxlexxxx.cloudfront.net/' : "/";
+...
+staticUrlRoot: root
+```
+
 License
 -------
 
