@@ -159,7 +159,7 @@ BundleUp(app, __dirname + '/assets', {
 When using Express, you can easily have the development environment skip the CDN.
 
 ``` js
-var staticUrlRoot = app.get('env') == "production" ? '///drhu3hxlexxxx.cloudfront.net/' : "/";
+var root = app.get('env') == "production" ? '///drhu3hxlexxxx.cloudfront.net/' : "/";
 ...
 staticUrlRoot: root
 ```
