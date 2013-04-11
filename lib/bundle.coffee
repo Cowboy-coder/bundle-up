@@ -7,6 +7,8 @@ fs = require 'fs'
 class Bundle
   constructor: (@options) ->
     @options.staticRoot = path.normalize(@options.staticRoot)
+    @options.generatedDir = options.generatedDir || '/generated/'
+
     @files = []
     @defaultNamespace = 'global'
 
@@ -32,6 +34,9 @@ class Bundle
     fileExt = file.split('.')
     fileExt = fileExt[fileExt.length - 1]
     return  fileExt != 'js' and fileExt != 'css'
+
+  _needsUrlRewrite: ->
+    false
 
   addFilesBasedOnFilter: (filterPath, namespace) ->
     directoryPath = filterPath.substring(0, filterPath.indexOf('*'))
@@ -97,8 +102,9 @@ class Bundle
 
     # Determine if we need to copy/compile
     # the file into the staticRoot folder
+
     if (file.indexOf(@options.staticRoot) == -1 or @_needsCompiling(file))
-      writeTo = path.normalize(@_convertFilename(@options.staticRoot + '/generated/' + relativeFile))
+      writeTo = path.normalize(@_convertFilename(@options.staticRoot + @options.generatedDir + relativeFile))
       needsCompiling = true
       file = writeTo
       relativeFile = @_getRelativePath(file)
@@ -122,8 +128,13 @@ class Bundle
           str += fs.readFileSync(file.file, 'utf-8').trim('\n') + '\n'
 
       str = @minify(str)
+
+      if @_needsUrlRewrite()
+        relUrl = path.relative(@options.staticUrlRoot + @options.generatedDir + 'bundle', path.dirname file.url)
+        str = @_rewriteUrls(str, relUrl)
+
       hash = crypto.createHash('md5').update(str).digest('hex')
-      filepath = "#{@options.staticRoot}/generated/bundle/#{hash.substring(0, 7)}_#{namespace}#{@fileExtension}"
+      filepath = "#{@options.staticRoot}" + @options.generatedDir + "bundle/#{hash.substring(0, 7)}_#{namespace}#{@fileExtension}"
 
       writeToFile(filepath, str)
 
