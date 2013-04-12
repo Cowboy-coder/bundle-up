@@ -40,15 +40,7 @@ describe 'OnTheFlyCompiler', ->
 
   it 'should compile coffee files correctly', (done) ->
     request.get 'http://localhost:1338/generated/coffee/1.js', (err, res) ->
-      expected = '''
-      (function() {
-
-        console.log('1');
-
-      }).call(this);
-
-      '''
-      expect(res.body).to.equal(expected)
+      expect(res.body).to.contain("console.log('1');")
       done()
 
   it 'should map imported files for main.styl first time it is requested', (done) ->
