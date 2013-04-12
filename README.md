@@ -1,4 +1,4 @@
-Bundle up!  [![Build Status](https://secure.travis-ci.org/Cowboy-coder/bundle-up.png)](https://secure.travis-ci.org/Cowboy-coder/bundle-up)
+Bundle up!  [![Build Status](https://secure.travis-ci.org/Cowboy-coder/bundle-up.png)](https://travis-ci.org/Cowboy-coder/bundle-up)
 ==========
 
 Bundle up is a middleware for connect to manage all client-side assets in an organized way.
