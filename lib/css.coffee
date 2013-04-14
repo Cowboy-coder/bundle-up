@@ -8,7 +8,7 @@ class Css extends Bundle
     super
 
   _rewriteUrls: (code, relativeURL) ->
-    code.replace /url\(['"]?([^\)]*)['"]?\)/g, (match, $1) ->
+    code.replace /url\(['"]?([^\)"']*)['"]?\)/g, (match, $1) ->
       resUrl = path.normalize(path.join(relativeURL, $1))
       return "url('#{resUrl}')"
 
