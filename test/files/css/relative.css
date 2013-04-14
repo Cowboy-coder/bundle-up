@@ -1,0 +1,11 @@
+body {
+    background: url('relative/path/to/file1.jpg');
+}
+
+div#main {
+    background: url("relative/path/to/file2.jpg");
+}
+
+div.menu {
+    background: url(relative/path/to/file3.jpg);
+}

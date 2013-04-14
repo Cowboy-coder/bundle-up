@@ -65,3 +65,41 @@ describe 'bundle:true', ->
       fs.stat @bundle.js.files[0].file, (err, stats) ->
         expect(err).to.equal(null)
         done()
+
+
+describe 'CSS URL Rewriting', ->
+  beforeEach ->
+    helper.beforeEach()
+    @app = express.createServer()
+
+    # Bundle once without minifying and then once _with_ minifying:
+
+    @bundle = BundleUp @app, __dirname + "/files/relative.coffee",
+      staticRoot: __dirname + "/files/public/",
+      staticUrlRoot: "/",
+      bundle: true,
+      minifyJs: false,
+      minifyCss: true
+
+    @bundle_no = BundleUp @app, __dirname + "/files/relative.coffee",
+      staticRoot: __dirname + "/files/public/",
+      staticUrlRoot: "/",
+      bundle: false,
+      minifyJs: false,
+      minifyCss: false
+
+  it 'Bundled CSS should have their URLs rewritten', (done) ->
+    fs.readFile @bundle.css.files[0].file, (err, data) ->
+      data = data.toString()
+      expect(data.match(/'\.\.\/css\/relative\/path\/to\/file1\.jpg'/).length).to.equal(1)
+      expect(data.match(/'\.\.\/css\/relative\/path\/to\/file2\.jpg'/).length).to.equal(1)
+      expect(data.match(/'\.\.\/css\/relative\/path\/to\/file3\.jpg'/).length).to.equal(1)
+      done()
+
+  it 'Non-bundled CSS should have their URLs intact', (done) ->
+    fs.readFile @bundle_no.css.files[0].file, (err, data) ->
+      data = data.toString()
+      expect(data.match(/'relative\/path\/to\/file1\.jpg'/).length).to.equal(1)
+      expect(data.match(/"relative\/path\/to\/file2\.jpg"/).length).to.equal(1)
+      expect(data.match(/relative\/path\/to\/file3\.jpg/).length).to.equal(1)
+      done()
