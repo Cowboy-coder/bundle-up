@@ -11,3 +11,6 @@ module.exports =
     return content
   css: (content) ->
     return content
+  sass: (content, callback) ->
+    sass = require 'node-sass'
+    return sass.render(content, callback)
