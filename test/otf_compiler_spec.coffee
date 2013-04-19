@@ -38,6 +38,19 @@ describe 'OnTheFlyCompiler', ->
       expect(res.body).to.equal(expected)
       done()
 
+  it 'should compile SASS files correctly', (done) ->
+    request.get 'http://localhost:1338/generated/sass/main.css', (err, res) ->
+      expected = """
+      h1 {
+        color: blue; }
+
+      body {
+        background-color: yellow; }
+
+      """
+      expect(res.body).to.equal(expected)
+      done()
+
   it 'should compile coffee files correctly', (done) ->
     request.get 'http://localhost:1338/generated/coffee/1.js', (err, res) ->
       expect(res.body).to.contain("console.log('1');")

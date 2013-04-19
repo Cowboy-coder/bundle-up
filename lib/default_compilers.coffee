@@ -1,5 +1,18 @@
 coffee = require 'coffee-script'
 stylus = require 'stylus'
+path = require 'path'
+
+class SASSWrapper
+    constructor: (@content, @file) ->
+        @options = {}
+    render: (cb) =>
+        sass = require 'node-sass'
+        try
+          return cb null, sass.renderSync(@content,
+            {includePaths: [path.dirname(@file)]})
+        catch err
+          return cb err, null
+
 
 module.exports =
   stylus: (content, file) ->
@@ -11,6 +24,5 @@ module.exports =
     return content
   css: (content) ->
     return content
-  sass: (content, callback) ->
-    sass = require 'node-sass'
-    return sass.render(content, callback)
+  sass: (content, file) ->
+    return new SASSWrapper(content, file)

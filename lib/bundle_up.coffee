@@ -13,6 +13,7 @@ class BundleUp
       options.compilers.coffee = options.compilers.coffee || compilers.coffee
       options.compilers.js = options.compilers.js || compilers.js
       options.compilers.css = options.compilers.css || compilers.css
+      options.compilers.sass = options.compilers.css || compilers.sass
 
     options.minifyCss = options.minifyCss || false
     options.minifyJs = options.minifyJs || false

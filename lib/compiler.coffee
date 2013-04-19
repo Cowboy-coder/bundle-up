@@ -22,10 +22,11 @@ exports.compile = compile = (compilers, content, file, cb) ->
     when 'js'
       return cb(null, compilers.js(content))
     when 'scss'
-      return compilers.sass content, (err, result) ->
+      compilers.sass(content,file).render (err, result) ->
         if err?
           console.log err.message
-        return cb(null, result)
+          result = err.message
+        return cb(err, result)
 
 exports.compileFile =  (compilers, file, cb) ->
   content = fs.readFileSync(file, 'utf-8')

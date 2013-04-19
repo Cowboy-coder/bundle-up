@@ -6,3 +6,4 @@ module.exports = (assets) ->
   assets.addJs('/js/1.js')
   assets.addCss('/stylus/main.styl')
   assets.addCss('/public/print.styl')
+  assets.addCss('/sass/main.scss')
