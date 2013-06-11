@@ -133,16 +133,15 @@ class Bundle
       return filepath
 
     bundles = []
-    if @options.bundle == 'load-bundles'
-      try
-        bundles = (f for f in (fs.readdirSync("#{@options.staticRoot}/generated/bundle") or []) when f.indexOf(@fileExtension) > -1)
-      catch err
-        throw err unless err.code == 'ENOENT'
+    try
+      bundles = (f for f in (fs.readdirSync("#{@options.staticRoot}/generated/bundle") or []) when f.indexOf(@fileExtension) > -1)
+    catch err
+      throw err unless err.code == 'ENOENT'
 
-      for bundle in bundles
-        [hash, file...] = bundle.split '_'
-        file = file.join('_')
-        @addFile("#{@options.staticRoot}/generated/bundle/#{bundle}", file.replace(@fileExtension, ''))
+    for bundle in bundles
+      [hash, file...] = bundle.split '_'
+      file = file.join('_')
+      @addFile("#{@options.staticRoot}/generated/bundle/#{bundle}", file.replace(@fileExtension, ''))
 
     if bundles.length == 0
       for file in files

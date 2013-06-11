@@ -17,7 +17,7 @@ var BundleUp = require('bundle-up');
 BundleUp(app, __dirname + '/assets', {
   staticRoot: __dirname + '/public/',
   staticUrlRoot:'/',
-  bundle:true, // true | false | 'load-bundles'
+  bundle:true,
   minifyCss: true,
   minifyJs: true
 });
@@ -73,8 +73,6 @@ To render bundles `bundle:true` needs to be passed as a parameter to the middlew
 <link href='/generated/bundle/d7aa56c_global.css' media='screen' rel='stylesheet' type='text/css'/>
 <script src='/generated/bundle/1e4b515_global.js' type='text/javascript'></script>
 ```
-
-`bundle:'load-bundles'` will do the same as `bundle:true` except it will only generate the bundles if there are no bundles already in the `generated/bundle`-folder. This is useful to speed up restarts and could also be used for moving the bundling step to be done during build-time (if you are using Jenkins or similar) for example.
 
 All bundles are generated during startup. The filename will change with the content so you should configure your web server with far future expiry headers.
 
