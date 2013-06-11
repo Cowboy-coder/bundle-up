@@ -43,35 +43,34 @@ describe 'View Helper', ->
   describe 'renderJs', ->
     it 'should render the global.js bundle', (done) ->
       request.get 'http://localhost:1338/globalJs', (err, res) =>
-        expect(@bundle.js.files[0].namespace).to.equal('global')
-        expect(res.body).to.contain(@bundle.js.files[0].url)
+        expect(@bundle.js.files[1].namespace).to.equal('global')
+        expect(res.body).to.contain(@bundle.js.files[1].url)
 
-        expect(res.body).to.not.contain(@bundle.js.files[1].url)
+        expect(res.body).to.not.contain(@bundle.js.files[0].url)
         done()
 
     it 'should render the global.js and the custom_namespace.js bundle', (done) ->
       request.get 'http://localhost:1338/globalJs/custom_namespaceJs', (err, res) =>
-        expect(@bundle.js.files[0].namespace).to.equal('global')
-        expect(@bundle.js.files[1].namespace).to.equal('custom_namespace')
+        expect(@bundle.js.files[0].namespace).to.equal('custom_namespace')
+        expect(@bundle.js.files[1].namespace).to.equal('global')
         expect(res.body).to.contain(@bundle.js.files[0].url)
         expect(res.body).to.contain(@bundle.js.files[1].url)
         done()
 
     it 'should only render the custom_namespace.js bundle', (done) ->
       request.get 'http://localhost:1338/custom_namespaceJs', (err, res) =>
-        expect(@bundle.js.files[1].namespace).to.equal('custom_namespace')
-        expect(res.body).to.contain(@bundle.js.files[1].url)
-
-        expect(res.body).to.not.contain(@bundle.js.files[0].url)
+        expect(@bundle.js.files[0].namespace).to.equal('custom_namespace')
+        expect(res.body).to.contain(@bundle.js.files[0].url)
+        expect(res.body).to.not.contain(@bundle.js.files[1].url)
         done()
 
   describe 'renderStyles', ->
     it 'should render the global.css bundle', (done) ->
       request.get 'http://localhost:1338/globalCss', (err, res) =>
-        expect(@bundle.js.files[0].namespace).to.equal('global')
-        expect(res.body).to.contain(@bundle.js.files[0].url)
+        expect(@bundle.css.files[0].namespace).to.equal('global')
+        expect(res.body).to.contain(@bundle.css.files[0].url)
 
-        expect(res.body).to.not.contain(@bundle.js.files[1].url)
+        expect(res.body).to.not.contain(@bundle.css.files[1].url)
         done()
 
     it 'should render the global.css and the print_namespace.css bundle', (done) ->

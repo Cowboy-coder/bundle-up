@@ -138,6 +138,7 @@ class Bundle
     catch err
       throw err unless err.code == 'ENOENT'
 
+    bundles = bundles.sort()
     for bundle in bundles
       [hash, file...] = bundle.split '_'
       file = file.join('_')
@@ -147,6 +148,7 @@ class Bundle
       for file in files
         bundles.push file.namespace unless file.namespace in bundles
 
+      bundles = bundles.sort()
       @addFile(toBundle(bundle, files), bundle) for bundle in bundles
 
   _compile: (file, writeTo) =>

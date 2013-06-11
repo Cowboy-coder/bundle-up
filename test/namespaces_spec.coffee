@@ -44,6 +44,7 @@ describe 'Namespaces', ->
 
   describe 'bundle:true', ->
     beforeEach ->
+      helper.beforeEach()
       @app = express.createServer()
       @bundle = BundleUp @app, __dirname + '/files/assets_namespaced.coffee',
         staticRoot: __dirname + '/files/public/',
@@ -56,8 +57,8 @@ describe 'Namespaces', ->
 
     it 'should create global.js bundle and custom_namespace.bundle.js', ->
       expect(@bundle.js.files.length).to.equal(2)
-      expect(@bundle.js.files[0].origFile).to.contain('global.js')
-      expect(@bundle.js.files[1].origFile).to.contain('custom_namespace.js')
+      expect(@bundle.js.files[0].origFile).to.contain('custom_namespace.js')
+      expect(@bundle.js.files[1].origFile).to.contain('global.js')
 
-      expect(@bundle.js.files[0].namespace).to.equal('global')
-      expect(@bundle.js.files[1].namespace).to.equal('custom_namespace')
+      expect(@bundle.js.files[0].namespace).to.equal('custom_namespace')
+      expect(@bundle.js.files[1].namespace).to.equal('global')
