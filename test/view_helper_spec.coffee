@@ -9,6 +9,7 @@ request = require 'request'
 
 describe 'View Helper', ->
   beforeEach ->
+    helper.beforeEach()
     @app = express.createServer()
     @app.set('views', __dirname + '/views')
     @bundle = BundleUp @app, __dirname + '/files/assets_namespaced.coffee',
