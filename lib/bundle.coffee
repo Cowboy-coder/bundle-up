@@ -114,6 +114,9 @@ class Bundle
       namespace: namespace
 
   toBundles: =>
+    files = @files
+    @files = []
+
     toBundle = (namespace, files) =>
       str = ''
       for file in files
@@ -129,14 +132,23 @@ class Bundle
 
       return filepath
 
-    files = @files
-    @files = []
-
     bundles = []
-    for file in files
-      bundles.push file.namespace unless file.namespace in bundles
+    if @options.bundle == 'load-bundles'
+      try
+        bundles = (f for f in (fs.readdirSync("#{@options.staticRoot}/generated/bundle") or []) when f.indexOf(@fileExtension) > -1)
+      catch err
+        throw err unless err.code == 'ENOENT'
 
-    @addFile(toBundle(bundle, files), bundle) for bundle in bundles
+      for bundle in bundles
+        [hash, file...] = bundle.split '_'
+        file = file.join('_')
+        @addFile("#{@options.staticRoot}/generated/bundle/#{bundle}", file.replace(@fileExtension, ''))
+
+    if bundles.length == 0
+      for file in files
+        bundles.push file.namespace unless file.namespace in bundles
+
+      @addFile(toBundle(bundle, files), bundle) for bundle in bundles
 
   _compile: (file, writeTo) =>
     compiler.compileFile(@options.compilers, file, (err, content) ->
