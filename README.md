@@ -144,6 +144,9 @@ and this with `bundle:true`:
 
 ### CLI-tool
 
+It is also possible to interact with the bundle-up middleware
+from the command line (**Experimental!**)
+
     $ ./node_modules/.bin/bundleup --help
 
       Usage: bundleup [options] <your express app>
