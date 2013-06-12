@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+require('coffee-script');
+module.exports = require(__dirname + '/../lib/_exec');
