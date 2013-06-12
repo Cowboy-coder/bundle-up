@@ -142,6 +142,26 @@ and this with `bundle:true`:
 <script src='/generated/bundle/1e4b515_en_US.js' type='text/javascript'></script>
 ```
 
+### CLI-tool
+
+    $ ./node_modules/.bin/bundleup --help
+
+      Usage: bundleup [options] <your express app>
+
+      Options:
+
+        -h, --help     output usage information
+        -V, --version  output the version number
+        --build        Build the assets - exits directly after app.use(BundleUp(...));
+
+      Examples:
+
+      --build:
+        # Will execute server.js (works for .coffee as well) to build
+        # the assets files. Everything happens synchronously as soon as
+        # app.use(BundleUp(...)) is excuted and exits right after.
+        $ bundleup --build server.js
+
 ### Using CDN
 
 Using bundle-up with a CDN is pretty straight forward. In this example we´ll use a Cloud Front URL as the `staticUrlRoot`.
