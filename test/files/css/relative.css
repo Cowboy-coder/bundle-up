@@ -9,3 +9,7 @@ div#main {
 div.menu {
     background: url(relative/path/to/file3.jpg);
 }
+
+div.menu2 {
+    background: url('/absolute/path/to/file4.jpg');
+}

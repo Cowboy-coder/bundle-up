@@ -88,12 +88,13 @@ describe 'CSS URL Rewriting', ->
       minifyJs: false,
       minifyCss: false
 
-  it 'Bundled CSS should have their URLs rewritten', (done) ->
+  it 'Bundled CSS should have their URLs rewritten (except for the ones starting with `/`)', (done) ->
     fs.readFile @bundle.css.files[0].file, (err, data) ->
       data = data.toString()
       expect(data.match(/'\.\.\/css\/relative\/path\/to\/file1\.jpg'/).length).to.equal(1)
       expect(data.match(/'\.\.\/css\/relative\/path\/to\/file2\.jpg'/).length).to.equal(1)
       expect(data.match(/'\.\.\/css\/relative\/path\/to\/file3\.jpg'/).length).to.equal(1)
+      expect(data.match(/'\/absolute\/path\/to\/file4\.jpg'/).length).to.equal(1)
       done()
 
   it 'Non-bundled CSS should have their URLs intact', (done) ->
