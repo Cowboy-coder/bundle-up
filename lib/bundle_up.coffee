@@ -30,12 +30,18 @@ class BundleUp
       # Compile files on-the-fly when not bundled
       @app.use (new OnTheFlyCompiler(@js, @css, options.compilers)).middleware
 
-    @app.locals(
+    renderers = 
       renderStyles: (namespace=@css.defaultNamespace) =>
         return @css.render(namespace)
       renderJs: (namespace=@js.defaultNamespace) =>
         return @js.render(namespace)
-    )
+        
+    if typeof @app.locals is 'function'
+      #Express <4.0.0
+      @app.locals renderers
+    else 
+      #Express ~4.0.0
+      @app.locals[key] = value for key, value of renderers)
 
 module.exports = (app, assetPath, options)->
   new BundleUp(app, assetPath, options)
